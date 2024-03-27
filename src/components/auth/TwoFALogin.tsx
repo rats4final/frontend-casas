@@ -12,7 +12,8 @@ import { Button } from "../ui/button";
 import api from "@/lib/api";
 
 type TwoFALoginProps = {
-
+  onVerify: () => void
+  onFail: () => void
 }
 
 type TwoFAData = {
@@ -20,7 +21,7 @@ type TwoFAData = {
   code?: string
 }
 
-export default function TwoFaLogin({ onVerify, onFail }) {
+export default function TwoFaLogin({ onVerify, onFail }: TwoFALoginProps) {
   const [code, setCode] = useState("");
   const [recoveryCode, setRecoveryCode] = useState('');
   const [useRecoveryCode, setUseRecoveryCode] = useState(false);
@@ -34,9 +35,11 @@ export default function TwoFaLogin({ onVerify, onFail }) {
       data.code = code
     }
 
+    //api two factor
     api().post('/api/two-factor-challenge', data).then(() => {
       onVerify()
-    }).catch(() => {
+    }).catch((error) => {
+      console.log(error)
       onFail()
     })
   }
