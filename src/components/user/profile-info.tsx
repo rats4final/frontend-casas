@@ -12,15 +12,18 @@ import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
+import api from "@/lib/api";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 const profileInfoSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   email: z.string().email(),
 });
 
 type TprofileInfoSchema = z.infer<typeof profileInfoSchema>;
 
-export default function ProfileInfo() {
+export default function ProfileInfo({user}) {
   const form = useForm<TprofileInfoSchema>({
     resolver: zodResolver(profileInfoSchema),
     defaultValues: {
@@ -29,8 +32,21 @@ export default function ProfileInfo() {
     },
   });
 
-  function onSubmit(){
+  useEffect(() => {
+    if (user) {
+      form.reset({ name: user.name, email: user.email });
+    }
+  }, [user, form]);
 
+  
+
+  function onSubmit(data: TprofileInfoSchema){
+    console.log(data)
+    api().put('/api/user/profile-information', data).then(() => {
+      toast.success("Values updated correctly")
+    }).catch((errors) => {
+      console.log(errors);
+    })
   }
 
   return (
@@ -50,7 +66,20 @@ export default function ProfileInfo() {
             </FormItem>
           )}
         />
-        {/* <FormField /> */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input type="text" {...field}/>
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit">Save</Button>
       </form>
     </Form>
