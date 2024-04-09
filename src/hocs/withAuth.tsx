@@ -32,7 +32,8 @@ const withAuth = <P extends object>(
               //   api().post('/logout');
               // })
                 deleteLogInCookie();
-                api().post('/logout');
+                api().post('/api/logout');
+                //comment this change in commit to talk about cookie removal
 
             router.push('/auth/login');
           }
