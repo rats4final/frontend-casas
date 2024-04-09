@@ -1,5 +1,6 @@
 "use client";
 
+import BrowserSessions from "@/components/auth/BrowserSessions";
 import Disable2FA from "@/components/auth/Disable2FA";
 import Enable2FA from "@/components/auth/Enable2FA";
 import PasswordReset from "@/components/user/password-reset";
@@ -57,6 +58,8 @@ function Page() {
     <ProfileInfo user={user}/>
     <hr />
     <PasswordReset/>
+    <hr />
+      <BrowserSessions/>
     </main>
   );
 }
