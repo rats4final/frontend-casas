@@ -1,7 +1,8 @@
 import api from "@/lib/api";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import ConfirmPassword from "./ConfirmPassword";
+import ConfirmPasswordModal from "./ConfirmPasswordModal";
+import { toast } from "sonner";
 
 type Session = {
   isCurrentDevice: string;
@@ -26,16 +27,13 @@ function BrowserSessions() {
       });
   }
 
-  function handleChildData(password:string) {
-    setPassword(password);
-  }
-
   function logOutAll() {
     api()
       .post("/api/user/sessions/purge", { password })
       .then(() => {
         setConfirming(false);
         getSessions();
+        toast.success("Sessions Logged Out Succesfully");
       })
       .catch((errors) => {
         console.log(errors);
@@ -63,12 +61,12 @@ function BrowserSessions() {
             ))}
         <Button onClick={() => setConfirming(true)}>Log Out All Devices</Button>
         {confirming ? (
-          <ConfirmPassword
+          <ConfirmPasswordModal
             confirming={true}
             setConfirming={setConfirming}
-            onSuccess={() => logOutAll()}
-            onFail={() => alert("error while confirming password")}
-            sendPasswordToParent={handleChildData}
+            onConfirm={() => logOutAll()}
+            password={password}
+            setPassword={setPassword}
           />
         ) : null}
       </div>
