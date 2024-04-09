@@ -42,7 +42,7 @@ function Page() {
           <button
             onClick={() => {
               api()
-                .post("/logout")
+                .post("/api/logout")
                 .then(() => {
                   deleteLogInCookie();
                   //forcePageRefresh();

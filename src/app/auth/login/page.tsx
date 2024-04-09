@@ -35,7 +35,7 @@ export default function Page() {
       .get("/sanctum/csrf-cookie")
       .then(() => {
         api()
-          .post("/login", data)
+          .post("/api/login", data)
           .then((response) => {
             if (response.data.error) {
               console.log(response.data.error);
