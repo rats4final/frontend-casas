@@ -1,8 +1,9 @@
 import api from "@/lib/api";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ColorRing } from "react-loader-spinner";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import useUserStore from "@/lib/userStore";
+import { useRouter } from "next/navigation";
 import { deleteLogInCookie } from "@/lib/authCookies";
 
 //TODO: CHECK AND TRY WITH THE COOKIE INSTEAD OF RELYING ON THE AXIOS ERROR
@@ -11,34 +12,35 @@ const withAuth = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {
   const AuthWrapper = (props: object) => {
-    const router = useRouter();
     const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const { user, setUser } = useUserStore();
+    const router = useRouter();
 
     useEffect(() => {
-      const verifyUser = () => {
-        //TODO: MAYBE INTERCEPTORS COULD HAVE A USE, INSTEAD OF THIS IMPLEMENTATION
-        api()
-          .get("/api/user")
-          .then((response) => {
-            console.log(response.data);
-            if(Cookies.get('is_user_logged_in') === 'true'){
+      (async function authPipeline() {
+        try {
+          if (Cookies.get("is_user_logged_in") === "true") {
+            if (!user) {
+              const userData = await api().get("/api/user");
+              setUser(userData.data);
               setAuthenticated(true);
             }else{
-              deleteLogInCookie();
-              router.push('/auth/login')
+              setAuthenticated(true);
             }
-          })
-          .catch((error) => {
-            if (error.response.status === 401) {
-              console.log(error);
-              setAuthenticated(false);
-              deleteLogInCookie();
-              router.push("/auth/login");
-            }
-          });
-      };
-      verifyUser();
-    }, [router]);
+          }else{
+            // api().get('/sanctum/csrf-cookie').then(() => {
+              //   api().post('/logout');
+              // })
+                deleteLogInCookie();
+                api().post('/logout');
+
+            router.push('/auth/login');
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }, [user, setUser, router]);
 
     if (authenticated) {
       return <WrappedComponent {...(props as P)} />;
