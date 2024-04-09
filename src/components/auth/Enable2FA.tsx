@@ -78,6 +78,7 @@ export default function Enable2FA({ onSuccess }: Enable2FAProps) {
           onFail={() => {
             alert("Failed to confirm password");
           }}
+          sendPasswordToParent={() => {}}//this too
         />
       ) : null}
     </>

@@ -31,6 +31,7 @@ export default function Disable2FA({onSuccess}:Disable2FAProps){
                         alert('Failed to confirm password')
                     }}
                     onSuccess={disable}
+                    sendPasswordToParent={() => {}}//rethink this component later
                 />
             ): null}
         </>

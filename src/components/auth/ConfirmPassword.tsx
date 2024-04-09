@@ -14,6 +14,7 @@ type ConfirmPasswordProps = {
     setConfirming: Dispatch<SetStateAction<boolean>>
     onFail: () => void
     onSuccess: () => void
+    sendPasswordToParent: (password: string) => void
 }
 
 export default function ConfirmPassword({
@@ -21,12 +22,14 @@ export default function ConfirmPassword({
   setConfirming,
   onFail,
   onSuccess,
+  sendPasswordToParent,
 }: ConfirmPasswordProps) {
   const [password, setPassword] = useState("");
 
   function confirm() {
     api().post('/api/user/confirm-password', {password}).then(() => {
         onSuccess()
+        sendPasswordToParent(password);
     }).catch((error) => {
         console.log(error)
         onFail();
