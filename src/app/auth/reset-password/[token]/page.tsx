@@ -1,31 +1,55 @@
-"use client"
-//import { useRouter } from "next/navigation";
+import api from "@/lib/api";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
-// export default function Page({
-//   params,
-//   searchParams,
-// }: {
-//   params: { token: string }
-//   searchParams: { [key: string]: string | string[] | undefined }
-// }) {
-//   const {token} = params;
+const resetPasswordSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+  password_confirmation: z.string(),
+  token: z.string(),
+});
 
-//   //const router = useRouter();
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: { token: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  console.log(params);
+  console.log(searchParams);
 
-//   console.log(params)
-//   console.log(searchParams)
-//   return <div>Page</div>;
-// }
-//TODO: CHECK FOR SERVERSIDE FORMS AND ALSO CHECK ZUSTAND FOR GLOBAL USER 
-import { useRouter, useSearchParams } from "next/navigation";
+  async function send(formData: FormData) {
+    "use server";
+    const {email, password, password_confirmation, token } = resetPasswordSchema.parse({
+      email: searchParams.email,
+      password: formData.get("password"),
+      password_confirmation: formData.get("password_confirmation"),
+      token: params.token,
+    });
+    try {
+      await api().get("/sanctum/csrf-cookie");
+      await api().post("/api/reset-password", {
+        email: email,
+        password: password,
+        password_confirmation: password_confirmation,
+        token: token,
+      });
+    } catch (error) {
+      console.log(error)
+    } finally {
+      redirect("/auth/login");
+    }
+  }
 
-export default function Page({ params }: { params: { token: string } }) {
-  const {token} = params;
-  const searchParams = useSearchParams();
-  const email = searchParams.get('email');
-  const router = useRouter();
-
-  console.log(token, email);
-
-  return <>Page</>;
+  return (
+    <main>
+      <p>Hellooo</p>
+      <form action={send}>
+        <input className="border" type="text" name="password" />
+        <input className="border" type="text" name="password_confirmation"/>
+        <button type="submit">Change</button>
+      </form>
+    </main>
+  );
 }
