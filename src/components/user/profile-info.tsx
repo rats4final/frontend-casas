@@ -23,7 +23,7 @@ const profileInfoSchema = z.object({
 
 type TprofileInfoSchema = z.infer<typeof profileInfoSchema>;
 
-export default function ProfileInfo({user}) {
+export default function ProfileInfo({user}:{user: any}) {//dont leave this any
   const form = useForm<TprofileInfoSchema>({
     resolver: zodResolver(profileInfoSchema),
     defaultValues: {
