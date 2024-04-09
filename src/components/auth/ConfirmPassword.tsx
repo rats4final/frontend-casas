@@ -8,6 +8,7 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import api from "@/lib/api";
+import ConfirmPasswordModal from "./ConfirmPasswordModal";
 
 type ConfirmPasswordProps = {
     confirming: boolean
@@ -22,14 +23,12 @@ export default function ConfirmPassword({
   setConfirming,
   onFail,
   onSuccess,
-  sendPasswordToParent,
 }: ConfirmPasswordProps) {
   const [password, setPassword] = useState("");
 
   function confirm() {
     api().post('/api/user/confirm-password', {password}).then(() => {
         onSuccess()
-        sendPasswordToParent(password);
     }).catch((error) => {
         console.log(error)
         onFail();
@@ -37,28 +36,12 @@ export default function ConfirmPassword({
   }
 
   return (
-    <Dialog open={confirming} onOpenChange={setConfirming}>
-      <DialogContent>
-        <DialogHeader></DialogHeader>
-        <div>
-          <Input
-            type="password"
-            name="password"
-            value={password}
-            onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
-          />
-        </div>
-        <DialogFooter>
-          <Button
-            onClick={() => {
-              setConfirming(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button onClick={confirm}>Confirm</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <ConfirmPasswordModal
+      setConfirming={setConfirming}
+      confirming={confirming}
+      password={password}
+      setPassword={setPassword}
+      onConfirm={confirm}
+    />
   );
 }
