@@ -15,6 +15,8 @@ import { setLogInCookie } from "@/lib/authCookies";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import TwoFaLogin from "@/components/auth/TwoFALogin";
+import useUserStore from "@/lib/userStore";
+import Cookies from "js-cookie";
 
 export default function Page() {
   const {
@@ -25,6 +27,7 @@ export default function Page() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [twoFA, setTwoFA] = useState(false);
   const router = useRouter();
+
 
   function onSubmit(data: TLoginSchema) {
     console.log(data);
@@ -59,6 +62,12 @@ export default function Page() {
     setTwoFA(false)
     alert("You entered the wrong code");
   }
+
+  //TODO: ADD THIS MAYBE IN A LAYOUT
+  // if (Cookies.get("is_user_logged_in") === "true") {
+  //   router.push('/dashboard');
+  // }
+  // rethink this implementation, maybe check the user in the store?
 
   return (
     <main className="flex min-h-screen items-center justify-center">
