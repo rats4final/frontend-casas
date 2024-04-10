@@ -19,6 +19,7 @@
     "@react-three/drei": "^9.99.3",
     "@react-three/fiber": "^8.15.16",
     "@syncfusion/ej2-react-schedule": "^24.2.4",
+    "@tanstack/react-table": "^8.15.3",
     "@types/cookie": "^0.6.0",
     "@types/js-cookie": "^3.0.6",
     "@types/three": "^0.161.2",
