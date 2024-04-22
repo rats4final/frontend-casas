@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import api from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { TLoginSchema, loginSchema } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -17,17 +16,26 @@ import { buttonVariants } from "@/components/ui/button";
 import TwoFaLogin from "@/components/auth/TwoFALogin";
 import useUserStore from "@/lib/userStore";
 import Cookies from "js-cookie";
+import PasswordInput from "./PasswordInput";
+import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function Page() {
   const {
+    setValue,
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
-  } = useForm<TLoginSchema>({ resolver: zodResolver(loginSchema) });
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  } = useForm<TLoginSchema>({ resolver: zodResolver(loginSchema),
+    defaultValues: {
+      remember: false
+    }
+   });
   const [twoFA, setTwoFA] = useState(false);
   const router = useRouter();
 
+  //console.log(errors)
 
   function onSubmit(data: TLoginSchema) {
     console.log(data);
@@ -36,32 +44,51 @@ export default function Page() {
       .then(() => {
         api()
           .post("/api/login", data)
+          .catch((error) => {
+            setError("password", {
+              type: "server",
+              message: error.response.data.message,
+            });
+            setError("email", {
+              type: "server",
+              message: error.response.data.message,
+            });
+            console.log(error);
+            return Promise.reject(error);
+          })
           .then((response) => {
             if (response.data.error) {
               console.log(response.data.error);
             } else {
               if (response.data.two_factor === true) {
                 console.log(response);
+                toast.info("You need to provide 2fa passcode")
                 setTwoFA(true);
                 //maybe add a toast
               } else {
                 console.log("success");
+                toast.success("Logged in succesfully")
                 setLogInCookie();
                 router.push("/dashboard");
               }
             }
+          })
+          .catch((e) => {
+            toast.error("Something went wrong");
           });
       });
   }
 
-  function passwordVisibilityToggler() {
-    setIsPasswordVisible((prevState) => !prevState);
+  function handleTwoFAFailure() {
+    setTwoFA(false);
+    toast.error("You entered the wrong code");
   }
 
-  function handleTwoFAFailure() {
-    setTwoFA(false)
-    alert("You entered the wrong code");
-  }
+  const handleCheckboxChange = (checked: boolean | "indeterminate") => {
+    if (typeof checked === "boolean") {
+      setValue("remember", checked);
+    }
+  };
 
   //TODO: ADD THIS MAYBE IN A LAYOUT
   // if (Cookies.get("is_user_logged_in") === "true") {
@@ -72,10 +99,14 @@ export default function Page() {
   return (
     <main className="flex min-h-screen items-center justify-center">
       {twoFA ? (
-        <TwoFaLogin onFail={handleTwoFAFailure} onVerify={() => {
-          setLogInCookie();
-          router.push("/dashboard");
-        }} />
+        <TwoFaLogin
+          onFail={handleTwoFAFailure}
+          onVerify={() => {
+            setLogInCookie();
+            router.push("/dashboard");
+            //maybe define an inner function for login
+          }}
+        />
       ) : (
         <Card className="w-80">
           <CardHeader className="flex items-center justify-center">
@@ -102,23 +133,21 @@ export default function Page() {
               <div>
                 <Label htmlFor="password">Password</Label>
                 <div className="flex items-center justify-evenly">
-                  <Input
-                    {...register("password")}
-                    type={isPasswordVisible ? "text" : "password"}
-                    placeholder="Password"
-                    name="password"
-                    id="password"
-                  />
-                  <EyeOpenIcon
-                    onClick={passwordVisibilityToggler}
-                    className="h-5 w-10"
-                  />
+                  <PasswordInput {...register("password")} />
                 </div>
                 {errors.password && (
                   <p className="text-sm text-red-500">
                     {errors.password.message}
                   </p>
                 )}
+              </div>
+              <div className="flex gap-2 items-center">
+                Remember Me
+                <Checkbox
+                  {...register("remember")}
+                  id="remember"
+                  onCheckedChange={handleCheckboxChange}
+                />
               </div>
               <Button disabled={isSubmitting}>Login</Button>
               <Link
