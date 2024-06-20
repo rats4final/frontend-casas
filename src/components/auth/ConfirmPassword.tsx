@@ -15,7 +15,6 @@ type ConfirmPasswordProps = {
     setConfirming: Dispatch<SetStateAction<boolean>>
     onFail: () => void
     onSuccess: () => void
-    sendPasswordToParent: (password: string) => void
 }
 
 export default function ConfirmPassword({
