@@ -8,7 +8,7 @@ import api from "@/lib/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { TLoginSchema, loginSchema } from "@/lib/types";
+import { TLoginSchema, loginSchema } from "@/lib/formTypes";
 import { useRouter } from "next/navigation";
 import { setLogInCookie } from "@/lib/authCookies";
 import Link from "next/link";
@@ -37,6 +37,7 @@ export default function Page() {
 
   //console.log(errors)
 
+  //TODO: IF YOU ARE LOGGED AND TRY TO LOGIN AGAIN THERES A ERROR IN CORS 
   function onSubmit(data: TLoginSchema) {
     console.log(data);
     api()
@@ -62,26 +63,26 @@ export default function Page() {
             } else {
               if (response.data.two_factor === true) {
                 console.log(response);
-                toast.info("You need to provide 2fa passcode")
+                toast.info("Necesitas proporcionar un codigo 2fa")
                 setTwoFA(true);
                 //maybe add a toast
               } else {
                 console.log("success");
-                toast.success("Logged in succesfully")
+                toast.success("Loggeado exitosamente")
                 setLogInCookie();
                 router.push("/dashboard");
               }
             }
           })
           .catch((e) => {
-            toast.error("Something went wrong");
+            toast.error("Algo salio mal");
           });
       });
   }
 
   function handleTwoFAFailure() {
     setTwoFA(false);
-    toast.error("You entered the wrong code");
+    toast.error("Ingresaste el codigo equivocado");
   }
 
   const handleCheckboxChange = (checked: boolean | "indeterminate") => {
@@ -131,7 +132,7 @@ export default function Page() {
                 )}
               </div>
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <div className="flex items-center justify-evenly">
                   <PasswordInput {...register("password")} />
                 </div>
@@ -142,7 +143,7 @@ export default function Page() {
                 )}
               </div>
               <div className="flex gap-2 items-center">
-                Remember Me
+                Recuerdame
                 <Checkbox
                   {...register("remember")}
                   id="remember"
@@ -151,7 +152,7 @@ export default function Page() {
               </div>
               <Button disabled={isSubmitting}>Login</Button>
               <Link
-                href="http://localhost:8000/auth/google/redirect"
+                href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/redirect`}
                 className={buttonVariants({ variant: "default" })}
               >
                 <svg
@@ -180,7 +181,7 @@ export default function Page() {
                     d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                   ></path>
                 </svg>
-                Log In With Google
+                Log In con Google
               </Link>
             </form>
           </CardContent>

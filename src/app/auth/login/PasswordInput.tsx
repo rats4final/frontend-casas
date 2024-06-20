@@ -14,7 +14,7 @@ const PasswordInput = forwardRef<
         {...props}
         ref={ref}
         type={isPasswordVisible ? "text" : "password"}
-        placeholder="Password"
+        placeholder="Contraseña"
         name="password"
         id="password"
       />
