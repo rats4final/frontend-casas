@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,7 +8,7 @@ import FilePondPluginImageEdit from "filepond-plugin-image-edit";
 import "filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import FilePondPluginFilePoster from "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js";
+//import FilePondPluginFilePoster from "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.esm.js";
 import "filepond/dist/filepond.min.css";
 import "filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css";
 
@@ -59,7 +60,7 @@ const states = [
 ];
 
 registerPlugin(
-  FilePondPluginFilePoster,
+  // FilePondPluginFilePoster,
   FilePondPluginImageEdit,
   FilePondPluginImagePreview,
 );
