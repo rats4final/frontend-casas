@@ -4,7 +4,7 @@ export default function api() {
 
 
   const api = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
     headers: {
       "X-Requested-With": "XMLHttpRequest",
     },
@@ -19,7 +19,7 @@ export default function api() {
           if(window){
             deleteLogInCookie();
             console.log(error)
-            window.location.replace('http://localhost:3000/auth/login');
+            window.location.replace(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/auth/login`);
             return Promise.reject();
           }
         }
