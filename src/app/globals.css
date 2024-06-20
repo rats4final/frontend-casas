@@ -86,3 +86,18 @@
 @import "../../node_modules/@syncfusion/ej2-popups/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind.css";
 @import "../../node_modules/@syncfusion/ej2-react-schedule/styles/tailwind.css";
+
+#zappar-button {
+	position: absolute;
+	bottom: 30px;
+	width: 200px;
+	left: calc(50% - 100px);
+	z-index: 1000;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	text-align: center;
+	font-family: sans-serif;
+	padding: 10px;
+	border-radius: 5px;
+	position: "absolute"
+}
