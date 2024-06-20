@@ -46,7 +46,7 @@ export default function TwoFaLogin({ onVerify, onFail }: TwoFALoginProps) {
 
   return (
     <div>
-      <span>{`Enter ${useRecoveryCode ? "Recovery" : ""} Code`}</span>
+      <span>{`Ingrese el ${useRecoveryCode ? "Alterno" : ""} Codigo`}</span>
       {useRecoveryCode ? (
         <Input type="text" value={recoveryCode} onInput={(e) => setRecoveryCode((e.target as HTMLInputElement).value)} />
       ) : (
@@ -71,14 +71,14 @@ export default function TwoFaLogin({ onVerify, onFail }: TwoFALoginProps) {
           )}
         />
       )}
-      <Label htmlFor="recovery-code-checkbox">Recovery Code</Label>
+      <Label htmlFor="recovery-code-checkbox">Codigo Alterno</Label>
       <Checkbox
         id="recovery-code-checkbox"
         onCheckedChange={() => {
           setUseRecoveryCode(!useRecoveryCode);
         }}
       />
-      <Button onClick={verify} >Verify</Button>
+      <Button onClick={verify} >Verificar</Button>
     </div>
   );
 }

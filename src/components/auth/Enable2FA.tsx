@@ -3,8 +3,10 @@ import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
 } from "../ui/dialog";
 import ConfirmPassword from "./ConfirmPassword";
 import api from "@/lib/api";
@@ -20,37 +22,49 @@ export default function Enable2FA({ onSuccess }: Enable2FAProps) {
   const [recoveryCodes, setRecoveryCodes] = useState([]);
 
   function enable() {
-    api().post('/api/user/two-factor-authentication').then(() => {
+    api()
+      .post("/api/user/two-factor-authentication")
+      .then(() => {
+        api()
+          .get("/api/user/two-factor-qr-code")
+          .then(({ data }) => {
+            setQrCode(data.svg);
+          });
 
-        api().get('/api/user/two-factor-qr-code').then(({data}) => {
-            setQrCode(data.svg)
-        })
-
-        api().get('/api/user/two-factor-recovery-codes').then(({data}) => {
-            setRecoveryCodes(data)
-        })
+        api()
+          .get("/api/user/two-factor-recovery-codes")
+          .then(({ data }) => {
+            setRecoveryCodes(data);
+          });
 
         setConfirming(false);
         setTwoFAEnabled(true);
-    }).catch((error) => {
-        if(error.response.status === 423){
-            setConfirming(true);
+      })
+      .catch((error) => {
+        if (error.response.status === 423) {
+          setConfirming(true);
         }
-    })
+      });
   }
 
   return (
     <>
-      <Button onClick={enable}>Enable</Button>
-      <Dialog open={twoFAEnabled}>
+      <Button onClick={enable}>Habilitar</Button>
+      <Dialog open={twoFAEnabled} onOpenChange={setTwoFAEnabled}>
         <DialogContent>
-          <DialogHeader></DialogHeader>
-          <div>
+          <DialogHeader>
+            <DialogTitle>Datos de la Autentificacion en Dos Factores</DialogTitle>
+            <DialogDescription>
+              Usa estos codigos para recuperar acceso si pierder tu celular o no puedes 
+              acceder a los codigos OTP. Guarda estos codigos en un lugar seguro
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center justify-evenly">
             <div>
               {qrCode && <span dangerouslySetInnerHTML={{ __html: qrCode }} />}
             </div>
             <div>
-              <p>Recovery Codes</p>
+              <p>Codigos de Recuperacion</p>
               <div>
                 {recoveryCodes.map((item) => (
                   <div key={item}>{item}</div>
@@ -65,7 +79,7 @@ export default function Enable2FA({ onSuccess }: Enable2FAProps) {
                 onSuccess();
               }}
             >
-              Close
+              Confirmar Habilitacion
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -78,7 +92,6 @@ export default function Enable2FA({ onSuccess }: Enable2FAProps) {
           onFail={() => {
             alert("Failed to confirm password");
           }}
-          sendPasswordToParent={() => {}}//this too
         />
       ) : null}
     </>

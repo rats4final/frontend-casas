@@ -71,7 +71,7 @@ export default function ProfileInfo({user}:{user: any}) {//dont leave this any
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input type="text" {...field}/>
               </FormControl>
@@ -80,7 +80,7 @@ export default function ProfileInfo({user}:{user: any}) {//dont leave this any
             </FormItem>
           )}
         />
-        <Button type="submit">Save</Button>
+        <Button type="submit">Guardar</Button>
       </form>
     </Form>
   );

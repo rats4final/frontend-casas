@@ -61,11 +61,11 @@ function PasswordReset() {
           name="current_password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Current Password</FormLabel>
+              <FormLabel>Contraseña Actual</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
-              <FormDescription>Your Current Password</FormDescription>
+              <FormDescription>Ingrese su contraseña actual</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -75,11 +75,11 @@ function PasswordReset() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>Nueva Contraseña</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
-              <FormDescription>Your New Password</FormDescription>
+              <FormDescription>Su nueva contraseña</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -89,16 +89,16 @@ function PasswordReset() {
           name="password_confirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Password Confirmation</FormLabel>
+              <FormLabel>Confirme su Contraseña</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
-              <FormDescription>Confirm Your New Password</FormDescription>
+              <FormDescription>Confirme su nueva Contraseña</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Save</Button>
+        <Button type="submit">Guardar</Button>
       </form>
     </Form>
   );

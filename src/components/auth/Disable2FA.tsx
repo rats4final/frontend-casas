@@ -22,7 +22,7 @@ export default function Disable2FA({onSuccess}:Disable2FAProps){
 
     return(
         <>
-            <Button onClick={disable}>Disable</Button>
+            <Button onClick={disable}>Deshabilitar</Button>
             {confirming ? (
                 <ConfirmPassword
                     confirming={true}
@@ -31,7 +31,6 @@ export default function Disable2FA({onSuccess}:Disable2FAProps){
                         alert('Failed to confirm password')
                     }}
                     onSuccess={disable}
-                    sendPasswordToParent={() => {}}//rethink this component later
                 />
             ): null}
         </>

@@ -26,8 +26,8 @@ function ConfirmPasswordModal({
   return (
     <Dialog open={confirming} onOpenChange={setConfirming}>
       <DialogContent>
-        <DialogHeader></DialogHeader>
         <div>
+        <DialogHeader>Confirma tu Contraseña</DialogHeader>
           <Input
             type="password"
             name="password"
@@ -41,9 +41,9 @@ function ConfirmPasswordModal({
               setConfirming(false);
             }}
           >
-            Cancel
+            Cancelar
           </Button>
-          <Button onClick={onConfirm}>Confirm</Button>
+          <Button onClick={onConfirm}>Confirmar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
