@@ -33,7 +33,7 @@ function BrowserSessions() {
       .then(() => {
         setConfirming(false);
         getSessions();
-        toast.success("Sessions Logged Out Succesfully");
+        toast.success("Sesiones cerradas correctamente");
       })
       .catch((errors) => {
         console.log(errors);
@@ -45,21 +45,28 @@ function BrowserSessions() {
   }, []);
 
   return (
-    <div>
-      <h1>Logged In Sessions</h1>
-      <div>
-        {sessions === null
-          ? "Loading"
-          : sessions.map((item, index) => (
-              <div key={index}>
-                <div>
-                  <div>{item.ip}</div>
-                  <div>{item.agent.browser}</div>
-                  <div>{item.lastActive}</div>
-                </div>
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <h1 className="text-2xl font-semibold mb-4">Lista de Sesiones Actuales</h1>
+      <div className="space-y-4">
+        {sessions === null ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          sessions.map((item, index) => (
+            <div
+              key={index}
+              className="p-4 border rounded-md shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div className="flex justify-between items-center">
+                <div className="text-gray-600">{item.ip}</div>
+                <div className="text-gray-600">{item.agent.browser}</div>
+                <div className="text-gray-500 text-sm">{item.lastActive}</div>
               </div>
-            ))}
-        <Button onClick={() => setConfirming(true)}>Log Out All Devices</Button>
+            </div>
+          ))
+        )}
+        <Button onClick={() => setConfirming(true)} >
+          Cerrar Sesion en otros dispositivos
+        </Button>
         {confirming ? (
           <ConfirmPasswordModal
             confirming={true}
