@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    typescript: {
-        ignoreBuildErrors: true
-    },
     transpilePackages: ['three'],
     images: {
         remotePatterns: [
@@ -10,6 +7,11 @@ const nextConfig = {
                 protocol: 'http',
                 hostname: '127.0.0.1',
                 port: '9000',
+                pathname: '/**'
+            },
+            {
+                protocol: 'http',
+                hostname:  process.env.NEXT_PUBLIC_AWS_HOSTNAME,
                 pathname: '/**'
             }
         ]
