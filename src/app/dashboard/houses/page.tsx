@@ -1,20 +1,13 @@
 "use client"
 
 import DataTable from "@/components/ui/data-table";
-import api from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import useHouses from "@/hooks/useHouses";
 export default function HousesPage() {
 
-  const housesQuery = useQuery({
-    queryKey: ["houses"],
-    queryFn: async () => {
-      const response = await api().get('/api/houses')
-      return response.data;
-    },
-  })
+ const housesQuery = useHouses();
 
   console.log(housesQuery.error)
 
@@ -25,7 +18,7 @@ export default function HousesPage() {
           <Link href="/dashboard/houses/create">Agregar una Casa</Link>
         </Button>
       </section>
-      <DataTable data={housesQuery?.data?.data ?? []} columns={columns}/>
+      <DataTable data={housesQuery?.data ?? []} columns={columns}/>
     </main>
   )
 }
