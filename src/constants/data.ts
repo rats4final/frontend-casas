@@ -11,12 +11,12 @@ export const navItems: NavItem[] = [
     title: "Gestión de Propiedades",
     isSection: true, // Indicamos que es una sección
     children: [
-      {
-        title: "Usuarios",
-        href: "/dashboard/users",
-        icon: "user",
-        label: "users",
-      },
+      // {
+      //   title: "Usuarios",
+      //   href: "/dashboard/users",
+      //   icon: "user",
+      //   label: "users",
+      // },
       {
         title: "Propiedades",
         href: "/dashboard/properties",
