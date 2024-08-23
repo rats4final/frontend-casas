@@ -16,14 +16,14 @@ const nextConfig = {
             }
         ]
     },
-    webpack: (config) => {//zapworks config for its library
-        config.module.rules.push({
-            test: /zcv\.wasm$/,
-            type: "javascript/auto",
-            loader: "file-loader"
-        })
-        return config;
-    }
+    // webpack: (config) => {//zapworks config for its library
+    //     config.module.rules.push({
+    //         test: /zcv\.wasm$/,
+    //         type: "javascript/auto",
+    //         loader: "file-loader"
+    //     })
+    //     return config;
+    // }
 };
 
 export default nextConfig;
