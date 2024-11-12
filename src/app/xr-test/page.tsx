@@ -3,7 +3,7 @@ import { Box, Html, OrbitControls, Sky, Stage } from '@react-three/drei'
 import { Canvas, useLoader } from '@react-three/fiber'
 import { Interactive, XR, Controllers, VRButton, Hands, RayGrab } from '@react-three/xr'
 import { Suspense } from 'react'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export default function Page() {
   return (
