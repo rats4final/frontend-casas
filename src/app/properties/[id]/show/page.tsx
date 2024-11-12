@@ -9,7 +9,7 @@ import EquirectangularViews from "./EquiViews";
 import ContactForm from "./ContactForm";
 import VideoSphere from "./VideoSphere";
 
-export default async function Page({ params }) {
+export default async function Page({ params }: {params: {id: string}}) {
   const { id } = params;
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/properties/${id}`,
@@ -33,7 +33,7 @@ export default async function Page({ params }) {
             </Button>
           </div>
           <div className="grid grid-cols-3 gap-2 p-4">
-            {property.images.map((image, index) => (
+            {property.images.map((image, index: number) => (
               <ImageModal
                 key={index}
                 src={image.original_url}
@@ -100,9 +100,7 @@ export default async function Page({ params }) {
         </div>
         <div className="grid grid-cols-1 gap-6">
           <div className="rounded-lg bg-white p-6 shadow-lg">
-            <EquirectangularViews imageSources={property.equirectangular_views.map((view) => {
-              return view.original_url
-            }) ?? []}/>
+            <EquirectangularViews/>
           </div>
         </div>
         <div className="grid grid-cols-1 gap-6">
@@ -121,7 +119,7 @@ export default async function Page({ params }) {
   );
 }
 
-function CheckIcon(props) {
+function CheckIcon(props: any) {
   return (
     <svg
       {...props}
@@ -140,7 +138,7 @@ function CheckIcon(props) {
   );
 }
 
-function HeartIcon(props) {
+function HeartIcon(props: any) {
   return (
     <svg
       {...props}
@@ -159,7 +157,7 @@ function HeartIcon(props) {
   );
 }
 
-function XIcon(props) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}
