@@ -1,7 +1,7 @@
 "use client";
 import { OrbitControls, useTexture } from "@react-three/drei";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import {
   Controllers,
   Hands,
@@ -23,16 +23,14 @@ import { Button } from "@/components/ui/button";
 //   // Add more image sources here
 // ]
 
-export default function EquirectangularViews({
-  imageSources = [
-    "/images/stock.jpg",
-    "/images/equi_house.jpg",
-    "/images/apartment_ai.jpg",
-    "/images/bedroom.jpg",
-  ],
-}: {
-  imageSources: string[];
-}) {
+const imageSources = [
+  "/images/stock.jpg",
+  "/images/equi_house.jpg",
+  "/images/apartment_ai.jpg",
+  "/images/bedroom.jpg",
+]
+
+export default function EquirectangularViews() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleNextImage = () => {
