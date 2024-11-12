@@ -27,8 +27,8 @@ const tw = createTw({});
 
 const styles = StyleSheet.create({
   page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4',
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
     paddingVertical: 30,
     paddingHorizontal: 50,
   },
@@ -37,9 +37,19 @@ const styles = StyleSheet.create({
     padding: 10,
     flexGrow: 1,
   },
+  text: {
+    fontSize: 12,
+    lineHeight: 1.5,
+  },
+  header: {
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
+    textDecoration: 'underline',
+  },
 });
 
-const contenidoContrato = `Santa Cruz, ${new Date()}
+const contenidoContrato = `Santa Cruz, ${new Date().toLocaleDateString()}
 CONTRATO DE ALQUILER
 Conste por el presente documento privado de contrato de ALQUILER, que el
 mismo a solo reconocimiento de firmas y rúbricas entre partes suscribientes se
@@ -72,69 +82,87 @@ export default function ContractPage() {
   };
 
   return (
-    <ScrollArea className="h-screen">
-      <div>
-        <select
-          value={inquilino ? inquilino.id : ''}
-          onChange={(e) => setInquilino(personas.find((p) => p.id === parseInt(e.target.value)))}
+    <ScrollArea className="h-screen p-4 bg-gray-100">
+      <div className="max-w-4xl mx-auto bg-white p-8 rounded shadow-lg">
+        <h1 className="text-2xl font-bold mb-4">Generar Contrato de Alquiler</h1>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Seleccione un inquilino</label>
+          <select
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            value={inquilino ? inquilino.id : ''}
+            onChange={(e) => setInquilino(personas.find((p) => p.id === parseInt(e.target.value)))}
+          >
+            <option value="">Seleccione un inquilino</option>
+            {personas.map((persona) => (
+              <option key={persona.id} value={persona.id}>
+                {persona.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Seleccione un propietario</label>
+          <select
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            value={propietario ? propietario.id : ''}
+            onChange={(e) => setPropietario(propietarios.find((p) => p.id === parseInt(e.target.value)))}
+          >
+            <option value="">Seleccione un propietario</option>
+            {propietarios.map((propietario) => (
+              <option key={propietario.id} value={propietario.id}>
+                {propietario.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">Seleccione una propiedad</label>
+          <select
+            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            value={propiedad ? propiedad.id : ''}
+            onChange={(e) => setPropiedad(propiedades.find((p) => p.id === parseInt(e.target.value)))}
+          >
+            <option value="">Seleccione una propiedad</option>
+            {propiedades.map((propiedad) => (
+              <option key={propiedad.id} value={propiedad.id}>
+                {propiedad.direccion}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          onClick={handleGenerarPDF}
+          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          <option value="">Seleccione un inquilino</option>
-          {personas.map((persona) => (
-            <option key={persona.id} value={persona.id}>
-              {persona.nombre}
-            </option>
-          ))}
-        </select>
+          Generar PDF
+        </button>
+
+        {generarPDF && inquilino && propietario && propiedad && (
+          <div className="mt-8">
+            <PDFViewer className="w-full h-96" showToolbar>
+              <Document>
+                <Page size="A4" style={styles.page}>
+                  <View style={styles.section}>
+                    <Text style={styles.header}>CONTRATO DE ALQUILER</Text>
+                    <Text style={styles.text}>
+                      {contenidoContrato
+                        .replace('[NOMBRE_PROPIETARIO]', propietario.nombre)
+                        .replace('[CI_PROPIETARIO]', '1234567') // Aquí debes reemplazar por el CI del propietario
+                        .replace('[DIRECCION_PROPIEDAD]', propiedad.direccion)
+                        .replace('[NOMBRE_INQUILINO]', inquilino.nombre)
+                        .replace('[CI_INQUILINO]', '7654321')} 
+                    </Text>
+                  </View>
+                </Page>
+              </Document>
+            </PDFViewer>
+          </div>
+        )}
       </div>
-
-      <div>
-        <select
-          value={propietario ? propietario.id : ''}
-          onChange={(e) => setPropietario(propietarios.find((p) => p.id === parseInt(e.target.value)))}
-        >
-          <option value="">Seleccione un propietario</option>
-          {propietarios.map((propietario) => (
-            <option key={propietario.id} value={propietario.id}>
-              {propietario.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <select
-          value={propiedad ? propiedad.id : ''}
-          onChange={(e) => setPropiedad(propiedades.find((p) => p.id === parseInt(e.target.value)))}
-        >
-          <option value="">Seleccione una propiedad</option>
-          {propiedades.map((propiedad) => (
-            <option key={propiedad.id} value={propiedad.id}>
-              {propiedad.direccion}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <button onClick={handleGenerarPDF}>Generar PDF</button>
-
-      {generarPDF && inquilino && propietario && propiedad && (
-        <PDFViewer className='w-full h-screen' showToolbar>
-          <Document>
-            <Page size="A4" style={styles.page}>
-              <View style={styles.section}>
-                <Text>
-                  {contenidoContrato
-                    .replace('[NOMBRE_PROPIETARIO]', propietario.nombre)
-                    .replace('[CI_PROPIETARIO]', '1234567') // Aquí debes reemplazar por el CI del propietario
-                    .replace('[DIRECCION_PROPIEDAD]', propiedad.direccion)
-                    .replace('[NOMBRE_INQUILINO]', inquilino.nombre)
-                    .replace('[CI_INQUILINO]', '7654321')} 
-                </Text>
-              </View>
-            </Page>
-          </Document>
-        </PDFViewer>
-      )}
     </ScrollArea>
   );
 };
