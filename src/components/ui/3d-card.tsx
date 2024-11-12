@@ -49,8 +49,8 @@ export const CardContainer = ({
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
         className={cn(
-          "py-20 flex items-center justify-center",
-          containerClassName
+          "flex items-center justify-center py-20",
+          containerClassName,
         )}
         style={{
           perspective: "1000px",
@@ -62,8 +62,8 @@ export const CardContainer = ({
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           className={cn(
-            "flex items-center justify-center relative transition-all duration-200 ease-linear",
-            className
+            "relative flex items-center justify-center transition-all duration-200 ease-linear",
+            className,
           )}
           style={{
             transformStyle: "preserve-3d",
@@ -87,7 +87,7 @@ export const CardBody = ({
     <div
       className={cn(
         "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
-        className
+        className,
       )}
     >
       {children}
@@ -122,17 +122,24 @@ export const CardItem = ({
   const [isMouseEntered] = useMouseEnter();
 
   useEffect(() => {
+    const handleAnimations = () => {
+      if (!ref.current) return;
+      if (isMouseEntered) {
+        ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+      } else {
+        ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+      }
+    };
     handleAnimations();
-  }, [isMouseEntered]);
-
-  const handleAnimations = () => {
-    if (!ref.current) return;
-    if (isMouseEntered) {
-      ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
-    } else {
-      ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
-    }
-  };
+  }, [
+    isMouseEntered,
+    rotateX,
+    rotateY,
+    rotateZ,
+    translateX,
+    translateY,
+    translateZ,
+  ]);
 
   return (
     <Tag
